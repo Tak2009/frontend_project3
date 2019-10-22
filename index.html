@@ -2,14 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="stylesheets/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Iterators Filter Lab</title>
   <meta name="author" content="Flatiron School">
 </head>
 <body>
-  hello
+　<h2>1. Your Portfolio (Currency Accounts)</h2>
+  <div id="portfolio_list">
+      
+  </div>
+
+  <h2>2. Open New Currency Account</h2>
+  <select id="word">
+    <option value="none">Select new currency</option>
+    <option value="aoba">青葉区</option>
+    <option value="miyagino">宮城野区</option>
+    <option value="wakabayashi">若林区</option>
+    <option value="izumi">泉区</option>
+    <option value="taihaku">太白区</option>
+</select>
+
+<form id="new_form">
+  <input id="comment_input" type="text" name="comment" placeholder="Add sell amount"/>
+  <input id="comment_input" type="text" name="comment" placeholder="Add buy amount"/>
+  <input type="submit" value="Submit"/>
+</form>
+
+  
+   <h2>3. Trade Currencies</h2>
+    <select id="word">
+        <option value="none">Buy currency</option>
+        <option value="aoba">青葉区</option>
+        <option value="miyagino">宮城野区</option>
+        <option value="wakabayashi">若林区</option>
+        <option value="izumi">泉区</option>
+        <option value="taihaku">太白区</option>
+    </select>
+
+    <select id="word">
+        <option value="none">Sell currency</option>
+        <option value="aoba">青葉区</option>
+        <option value="miyagino">宮城野区</option>
+        <option value="wakabayashi">若林区</option>
+        <option value="izumi">泉区</option>
+        <option value="taihaku">太白区</option>
+    </select>
+
+  <form id="sellbuy_form">
+    <input id="comment_input" type="text" name="comment" placeholder="Add sell amount"/>
+    <input id="comment_input" type="text" name="comment" placeholder="Add buy amount"/>
+    <input type="submit" value="Submit"/>
+  </form>
+  
+  <div id="table">
+      
+  </div>
+  
+  <h2>4. Your Portfolio Currency Exposure</h2>
+  <div style="width:400px">
+    <canvas id="graph"></canvas>
+  </div>
   <script type="text/javascript" src='src/api.js' defer></script>
  <script type="text/javascript" src='src/index.js' defer></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+/* 表の書式設定 */
+.table {
+    text-align: center;
+}
+
+/* 行の書式設定 */
+.row {
+    display: flex;
+}
+
+/* 列の書式設定 */
+.cell {
+    margin: auto;
+}
