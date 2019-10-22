@@ -1,37 +1,45 @@
 
 const table = document.querySelector("#table")
 const portList = document.querySelector("#portfolio_list")
+const newForm = document.querySelector("#new_form")
 const openSelection = document.querySelector("#open_new")
 const openAccBtn = document.querySelector("#open_button")
 const openingAmt = document.querySelector("#open_account")
+const data = []
+const dataLabels = []
+const dataFigures = []
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 
-///////////Render portfolio\\\\\\\\\\\\\\\\
+/////////render portfolios\\\\\\\\\\\\\\\\\\\\
 const renderPortfolios = (portfolios) => {
-    console.log(portfolios)
-    const data = []
-    const dataLabels = []
-    const dataFigures = []
-      
-    portfolios.forEach(p =>{
-    const div = document.createElement("div")
-    div.id = p.id
-    const h3 = document.createElement("h3")
-    h3.innerText = `${p.exchange.currency.slice(-3)}: ${p.local_amt.toLocaleString()}, which is equivalent to GBP: ${p.home_amt.toLocaleString()}`
-    const dBtn = document.createElement("button")
-    dBtn.innerText = "Close this account"
-    h3.insertAdjacentElement("beforeend", dBtn)
-    div.append(h3)
-    portList.appendChild(div)
-    dataLabels.push(`${p.exchange.currency.slice(-3)}`)
-    dataFigures.push(p.home_amt)
-    })
+  portfolios.forEach(p => renderPortfolio(p))
+}
+
+///////////Render portfolio\\\\\\\\\\\\\\\\
+const renderPortfolio = (p) => {
+    
+  const div = document.createElement("div")
+  div.id = p.id
+  const h3 = document.createElement("h3")
+  h3.innerText = `${p.exchange.currency.slice(-3)}: ${p.local_amt.toLocaleString()}, which is equivalent to GBP: ${p.home_amt.toLocaleString()}`
+
+  const dBtn = document.createElement("button")
+  dBtn.innerText = "Close this account"
+  dBtn.addEventListener("click", (e) => {
+    deleteAcc(h3, div)
+  })
+
+  h3.insertAdjacentElement("beforeend", dBtn)
+  div.append(h3)
+  portList.appendChild(div)
+  dataLabels.push(`${p.exchange.currency.slice(-3)}`)
+  dataFigures.push(p.home_amt)
    
-   data.push(dataLabels)
-   data.push(dataFigures)
-   drawGraph(data)
+  data.push(dataLabels)
+  data.push(dataFigures)
+  drawGraph(data)
   //  calcExpo(data)　//機能しない理由が解明するまでコメントアウトし直接drawGraphへ
 };
 
@@ -41,25 +49,34 @@ const renderSelectOption = (fxrates) => {
   openSelection.innerHTML = " "
   fxrates.forEach(r => {
     const curOption = document.createElement("option")
-    curOption.innerText = r.currency.slice(-3)
-    curOption.id = r.id
+    curOption.innerText = `${r.id}. ${r.currency.slice(-3)}`
+    curOption.className = `exchnage-${r.id}`
     openSelection.appendChild(curOption)
 
   })
-}
+};
 
 //////////////Open new account\\\\\\\\\\\\\\\\\\\\\\\\\\\
-openAccBtn.addEventListener("submit", (e) => {
+newForm.addEventListener("submit", (e) => {
   //back-end. Passimistic as i need id for rerendering portforlio
+  const id = parseInt(openSelection.value.replace(/[^0-9]/g, ''));
   const newAcc = {
     local_amt: openingAmt.value,
     home_amt: 0,
-    exchange_id: openSelection.value
-  }
-  API.createNewAcc(newAcc)
+    exchange_id: id
+  };
+  API.createNewAcc(newAcc)//.then(p => renderPortfolio(p))
+});
 
-})
-
+////////delete\\\\\\\\\\\
+const deleteAcc = (h3, div) => {
+  //front-end
+  h3.parentNode.remove()
+  //back-end
+  const id = div.id
+  console.log(id)
+  API.deletePort(id)
+}
 
   
 
