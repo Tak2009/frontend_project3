@@ -1,61 +1,89 @@
 
 const table = document.querySelector("#table")
 const portList = document.querySelector("#portfolio_list")
-
-API.getFXRates().then(fxrates => renderFXRates(fxrates))
-
-const renderFXRates = (fxrates) => {
-    console.log(fxrates)
-};
+const openSelection = document.querySelector("#open_new")
+const openAccBtn = document.querySelector("#open_button")
+const openingAmt = document.querySelector("#open_account")
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
+API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 
+///////////Render portfolio\\\\\\\\\\\\\\\\
 const renderPortfolios = (portfolios) => {
     console.log(portfolios)
+    const data = []
+    const dataLabels = []
+    const dataFigures = []
+      
     portfolios.forEach(p =>{
-      const div = document.createElement("div")
-      div.id = p.id
-      const h3 = document.createElement("h3")
-      h3.innerText = `${p.exchange.currency.slice(-3)}: ${p.local_amt.toLocaleString()}, which is equivalent to GBP: ${p.home_amt.toLocaleString()}`
-      const dBtn = document.createElement("button")
-      dBtn.innerText = "Close this account"
-      h3.insertAdjacentElement("beforeend", dBtn)
-      div.append(h3)
-      portList.appendChild(div)
+    const div = document.createElement("div")
+    div.id = p.id
+    const h3 = document.createElement("h3")
+    h3.innerText = `${p.exchange.currency.slice(-3)}: ${p.local_amt.toLocaleString()}, which is equivalent to GBP: ${p.home_amt.toLocaleString()}`
+    const dBtn = document.createElement("button")
+    dBtn.innerText = "Close this account"
+    h3.insertAdjacentElement("beforeend", dBtn)
+    div.append(h3)
+    portList.appendChild(div)
+    dataLabels.push(`${p.exchange.currency.slice(-3)}`)
+    dataFigures.push(p.home_amt)
     })
+   
+   data.push(dataLabels)
+   data.push(dataFigures)
+   drawGraph(data)
+  //  calcExpo(data)　//機能しない理由が解明するまでコメントアウトし直接drawGraphへ
 };
 
-//Table
-// for (let i = 0; i < 3; i++) {
-//     const table = document.querySelector("#table");
-//     const dl = document.createElement('dl');
-//     dl.classList.add('row');
-//     table.appendChild(dl); 
-//     //　dtタグで列を作る（今回は4つ）
-//     for (let j = 0; j < 3; j++) {
-//         const dt = document.createElement('dt');
-//         dt.classList.add('cell')
-//         dt.textContent = `${i}行${j}列`;
-//         dl.appendChild(dt); 
-//     }
-// }
+///////////Reder option in 2\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+const renderSelectOption = (fxrates) => {
+  console.log(fxrates)
+  openSelection.innerHTML = " "
+  fxrates.forEach(r => {
+    const curOption = document.createElement("option")
+    curOption.innerText = r.currency.slice(-3)
+    curOption.id = r.id
+    openSelection.appendChild(curOption)
 
-// for (let i = 0; i < 4; i++) {
-//   const table = document.querySelector("#table");
-//   const dl = document.createElement('dl');
-//   dl.classList.add('row');
-//   table.appendChild(dl); 
-//   //　dtタグで列を作る（今回は4つ）
-//   for (let j = 0; j < 3; j++) {
-//       const dt = document.createElement('dt');
-//       dt.classList.add('cell')
-//       dt.textContent = `${i}行${j}列`;
-//       dl.appendChild(dt); 
-//   }
-// }
+  })
+}
+
+//////////////Open new account\\\\\\\\\\\\\\\\\\\\\\\\\\\
+openAccBtn.addEventListener("submit", (e) => {
+  //back-end. Passimistic as i need id for rerendering portforlio
+  const newAcc = {
+    local_amt: openingAmt.value,
+    home_amt: 0,
+    exchange_id: openSelection.value
+  }
+  API.createNewAcc(newAcc)
+
+})
 
 
-//Graph
+  
+
+//聞くこと///////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\聞くこと
+  // const calcExpo = (data) => {
+  //  const sum = data[1].reduce(function(acum, current){
+  //    acum + current})
+
+  // let sum = 0; //need to use let
+  //   const total = function(arr){
+    
+  //   arr.forEach(function(el){
+  //       sum += el;
+  //   });
+  //  };
+  //  total(data[1])
+  //  const dataRatio = data[1].map(el =>{
+  //   el/sum})
+  //  data[1] = dataRatio  //undefineになるので聞け
+  //  drawGraph(data)
+ // };
+
+
+
 const drawGraph = function(data){
     const ctx = document.getElementById('graph').getContext('2d');
     const datas = {
@@ -74,8 +102,8 @@ const drawGraph = function(data){
   };
   
   
-  window.onload=function () {
-      var data = [['A', 'B', 'C'],
-                  [200, 100, 50]]
-      drawGraph(data);
-  };
+  // window.onload=function () {
+  //     var data = [['A', 'B', 'C'],
+  //                 [200, 100, 50]]
+  //     drawGraph(data);
+  // };

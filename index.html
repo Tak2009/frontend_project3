@@ -14,26 +14,22 @@
       
   </div>
 
-  <h2>2. Open New Currency Account</h2>
-  <select id="word">
-    <option value="none">Select new currency</option>
+<h2>2. Open New Currency Account</h2>
+<form id="new_form"></form>
+<label>Select curreny:<select id="open_new"></label>
     <option value="aoba">青葉区</option>
     <option value="miyagino">宮城野区</option>
     <option value="wakabayashi">若林区</option>
     <option value="izumi">泉区</option>
     <option value="taihaku">太白区</option>
 </select>
-
-<form id="new_form">
-  <input id="comment_input" type="text" name="comment" placeholder="Add sell amount"/>
-  <input id="comment_input" type="text" name="comment" placeholder="Add buy amount"/>
-  <input type="submit" value="Submit"/>
+<input id="open_account" type="text" name="local_amt" placeholder="Add amount"/>
+<input type="submit" value="Submit" id="open_button"/>
 </form>
 
   
    <h2>3. Trade Currencies</h2>
     <select id="word">
-        <option value="none">Buy currency</option>
         <option value="aoba">青葉区</option>
         <option value="miyagino">宮城野区</option>
         <option value="wakabayashi">若林区</option>
@@ -42,7 +38,6 @@
     </select>
 
     <select id="word">
-        <option value="none">Sell currency</option>
         <option value="aoba">青葉区</option>
         <option value="miyagino">宮城野区</option>
         <option value="wakabayashi">若林区</option>
