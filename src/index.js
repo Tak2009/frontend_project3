@@ -8,6 +8,7 @@ const openingAmt = document.querySelector("#open_account")
 const data = []
 const dataLabels = []
 const dataFigures = []
+let dataPercentage = []
 let fxIdRatesArray = []
 let sum = 0 
 
@@ -25,8 +26,9 @@ API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 /////////render portfolios\\\\\\\\\\\\\\\\\\\\
 const renderPortfolios = (portfolios) => { 
   portfolios.forEach(p => renderPortfolio(p));
-  sum = dataFigures.reduce((accum, val) => accum + val, 0)     //once all the port rendered, program comes back here hence sum can be calc
+  sum = dataFigures.reduce((accum, val) => accum + val, 0)     //once all the ports rendered, program comes back here hence sum can be calc
   renderSumtoYourPort(sum)
+  calcPercentage(sum, dataFigures)
 }
 
 ///////////Render portfolio\\\\\\\\\\\\\\\\
@@ -52,7 +54,7 @@ const renderPortfolio = (p) => {
   data.push(dataLabels)
   data.push(dataFigures)
   // drawGraph(data)
-  // calcExpo(data)　//機能しない理由が解明するまでコメントアウトし直接drawGraphへ
+  
 };
 
 ///////add sum line in your portfolio section\\\\\\\\\\
@@ -64,6 +66,12 @@ const renderSumtoYourPort = (sum) => {
   h3.style.color = "blue";
   div.append(h3)
   portList.appendChild(div)
+};
+
+//////////calc % for graph\\\\\\\\\\\\
+const calcPercentage = (sum, dataFigures) => {
+  dataFigures.map(val => {dataPercentage.push(val/sum)}) 
+  //dataFigures.map(val => {(val/sum)}) did not work. 3 undefineds stored in an array
 }
 
 ///////////Reder option in 2\\\\\\\\\\\\\\\\\\\\
@@ -114,18 +122,7 @@ const deleteAcc = (h3, div) => {
 
   
 
-//聞くこと///////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\聞くこと
-
-//   const calcExpo = (data) => {
-//     sum += data[1][0]
-//   //  const sum = data[1].reduce(function(acum, current){
-//   //    acum + current})
-//   //    console.log(sum)
-//   //  }
-
-//  };
-
-
+/////////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // const drawGraph = function(data){
 //     const ctx = document.getElementById('graph').getContext('2d');

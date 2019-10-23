@@ -1,3 +1,4 @@
+//sample
 const gLines = [
     {
       ln_file: "T1301451.json",
@@ -19,6 +20,7 @@ const gLines = [
       if (item.ln_key == '1301541') return true;
     });
 
+    //test for my project
 const fxRates = [
     {1: 1.5},
     {2: 2},
