@@ -8,14 +8,26 @@ const openingAmt = document.querySelector("#open_account")
 const data = []
 const dataLabels = []
 const dataFigures = []
+let fxIdRatesArray = []
+let sum = 0 
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
+
+//////////////farates array\\\\\\\\\\\\\\\\\\\\\\\\\\\
+// const fxArray = (fxrates) => {
+//   // for (const fxrate of fxrates) {
+//     fxrates
+//   // }
+// };
+
 
 /////////render portfolios\\\\\\\\\\\\\\\\\\\\
 const renderPortfolios = (portfolios) => {
   portfolios.forEach(p => renderPortfolio(p))
 }
+
+
 
 ///////////Render portfolio\\\\\\\\\\\\\\\\
 const renderPortfolio = (p) => {
@@ -40,19 +52,24 @@ const renderPortfolio = (p) => {
   data.push(dataLabels)
   data.push(dataFigures)
   drawGraph(data)
-  //  calcExpo(data)　//機能しない理由が解明するまでコメントアウトし直接drawGraphへ
+  // calcExpo(data)　//機能しない理由が解明するまでコメントアウトし直接drawGraphへ
 };
 
 ///////////Reder option in 2\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 const renderSelectOption = (fxrates) => {
   console.log(fxrates)
-  openSelection.innerHTML = " "
-  fxrates.forEach(r => {
-    const curOption = document.createElement("option")
-    curOption.innerText = `${r.id}. ${r.currency.slice(-3)}`
-    curOption.className = `exchnage-${r.id}`
-    openSelection.appendChild(curOption)
 
+  //タスク１：FXIDとRateだけのハッシュを作ってhome currencyベースの残高を作る際に使う
+  fxIdRatesArray = fxrates.map(obj => ({[obj.id]: obj.rate })); 
+
+  // タスク２：select optionの表示とタグ作り
+  openSelection.innerHTML = " "　
+  fxrates.forEach(r => { 
+  const curOption = document.createElement("option")
+  curOption.value = r.id  //https://stackoverflow.com/questions/1170386/passing-hidden-input-fields-in-html-select-option
+  curOption.innerText = `${r.id}.${r.currency.slice(-3)}`
+  curOption.className = `exchnage-${r.id}`
+  openSelection.appendChild(curOption)
   })
 };
 
@@ -60,9 +77,15 @@ const renderSelectOption = (fxrates) => {
 newForm.addEventListener("submit", (e) => {
   //back-end. Passimistic as i need id for rerendering portforlio
   const id = parseInt(openSelection.value.replace(/[^0-9]/g, ''));
+  //Objectの配列から特定のキーに値が一致するものを取り出す　参考http://lifelog.main.jp/wordpress/?p=2557
+  //to get key = id, check test.js file
+  let fxRateforHomeValueCalc = fxIdRatesArray.filter(function(rate, index){
+    if (Object.keys(rate) == id) return true;
+  });
+  
   const newAcc = {
     local_amt: openingAmt.value,
-    home_amt: 0,
+    home_amt: openingAmt.value * fxRateforHomeValueCalc[0][id],
     exchange_id: id
   };
   API.createNewAcc(newAcc)//.then(p => renderPortfolio(p))
@@ -81,23 +104,15 @@ const deleteAcc = (h3, div) => {
   
 
 //聞くこと///////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\聞くこと
-  // const calcExpo = (data) => {
-  //  const sum = data[1].reduce(function(acum, current){
-  //    acum + current})
 
-  // let sum = 0; //need to use let
-  //   const total = function(arr){
-    
-  //   arr.forEach(function(el){
-  //       sum += el;
-  //   });
-  //  };
-  //  total(data[1])
-  //  const dataRatio = data[1].map(el =>{
-  //   el/sum})
-  //  data[1] = dataRatio  //undefineになるので聞け
-  //  drawGraph(data)
- // };
+//   const calcExpo = (data) => {
+//     sum += data[1][0]
+//   //  const sum = data[1].reduce(function(acum, current){
+//   //    acum + current})
+//   //    console.log(sum)
+//   //  }
+
+//  };
 
 
 
