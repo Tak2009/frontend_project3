@@ -14,7 +14,7 @@ let sum = 0
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 
-//////////////farates array\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////farates array\\\\\\\\\\\\\\\\\\
 // const fxArray = (fxrates) => {
 //   // for (const fxrate of fxrates) {
 //     fxrates
@@ -23,11 +23,11 @@ API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 
 
 /////////render portfolios\\\\\\\\\\\\\\\\\\\\
-const renderPortfolios = (portfolios) => {
-  portfolios.forEach(p => renderPortfolio(p))
+const renderPortfolios = (portfolios) => { 
+  portfolios.forEach(p => renderPortfolio(p));
+  sum = dataFigures.reduce((accum, val) => accum + val, 0)     //once all the port rendered, program comes back here hence sum can be calc
+  renderSumtoYourPort(sum)
 }
-
-
 
 ///////////Render portfolio\\\\\\\\\\\\\\\\
 const renderPortfolio = (p) => {
@@ -51,11 +51,22 @@ const renderPortfolio = (p) => {
    
   data.push(dataLabels)
   data.push(dataFigures)
-  drawGraph(data)
+  // drawGraph(data)
   // calcExpo(data)　//機能しない理由が解明するまでコメントアウトし直接drawGraphへ
 };
 
-///////////Reder option in 2\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////add sum line in your portfolio section\\\\\\\\\\
+const renderSumtoYourPort = (sum) => {
+  const div = document.createElement("div")
+  div.id = "portfolio-total"
+  const h3 = document.createElement("h3")
+  h3.innerText = `The total amount of your portfolio is GBP: ${sum.toLocaleString()}`
+  h3.style.color = "blue";
+  div.append(h3)
+  portList.appendChild(div)
+}
+
+///////////Reder option in 2\\\\\\\\\\\\\\\\\\\\
 const renderSelectOption = (fxrates) => {
   console.log(fxrates)
 
@@ -73,7 +84,7 @@ const renderSelectOption = (fxrates) => {
   })
 };
 
-//////////////Open new account\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////Open new account\\\\\\\\\\\\\\\\\\\
 newForm.addEventListener("submit", (e) => {
   //back-end. Passimistic as i need id for rerendering portforlio
   const id = parseInt(openSelection.value.replace(/[^0-9]/g, ''));
@@ -91,7 +102,7 @@ newForm.addEventListener("submit", (e) => {
   API.createNewAcc(newAcc)//.then(p => renderPortfolio(p))
 });
 
-////////delete\\\\\\\\\\\
+////////delete\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 const deleteAcc = (h3, div) => {
   //front-end
   h3.parentNode.remove()
@@ -116,26 +127,26 @@ const deleteAcc = (h3, div) => {
 
 
 
-const drawGraph = function(data){
-    const ctx = document.getElementById('graph').getContext('2d');
-    const datas = {
-      labels: data[0],
-      datasets: [{
-        backgroundColor: ["rgba(200,20,20,0.3)","rgba(20,200,20,0.3)","rgba(20,20,200,0.3)"],
-        hoverBackgroundColor: ["rgba(250,20,20,0.3)","rgba(20,250,20,0.3)","rgba(20,20,250,0.3)"],
-        data: data[1]
-      }]
-    };
-    const config = {
-      type: 'pie',
-      data: datas
-    };
-    const myChart = new Chart(ctx, config);
-  };
+// const drawGraph = function(data){
+//     const ctx = document.getElementById('graph').getContext('2d');
+//     const datas = {
+//       labels: data[0],
+//       datasets: [{
+//         backgroundColor: ["rgba(200,20,20,0.3)","rgba(20,200,20,0.3)","rgba(20,20,200,0.3)"],
+//         hoverBackgroundColor: ["rgba(250,20,20,0.3)","rgba(20,250,20,0.3)","rgba(20,20,250,0.3)"],
+//         data: data[1]
+//       }]
+//     };
+//     const config = {
+//       type: 'pie',
+//       data: datas
+//     };
+//     const myChart = new Chart(ctx, config);
+//   };
   
   
-  // window.onload=function () {
-  //     var data = [['A', 'B', 'C'],
-  //                 [200, 100, 50]]
-  //     drawGraph(data);
-  // };
+//// window.onload=function () {
+////     var data = [['A', 'B', 'C'],
+////                 [200, 100, 50]]
+////     drawGraph(data);
+//// };
