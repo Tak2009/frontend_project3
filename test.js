@@ -28,6 +28,14 @@ const fxRates = [
     {4: 4}
 ];
 
-var fxRate = fxRates.filter(function(rate, index){
+let fxRate = fxRates.filter(function(rate, index){
     if (Object.keys(rate) == "1") return true;
   });
+
+let fxRate2 = fxRates.filter((rate, index) => {
+  if (Object.keys(rate) === "1") return true
+})
+
+let fxRate3 = fxRates.filter((rate, index) => {
+  if (Object.keys(rate) == "1") return true
+})
