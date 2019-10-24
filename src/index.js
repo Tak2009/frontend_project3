@@ -10,7 +10,8 @@ const dataLabels = []
 const dataFigures = []
 let dataPercentage = []
 let fxIdRatesArray = []
-let sum = 0 
+let sum = 0
+
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
@@ -29,6 +30,10 @@ const renderPortfolios = (portfolios) => {
   sum = dataFigures.reduce((accum, val) => accum + val, 0)     //once all the ports rendered, program comes back here hence sum can be calc
   renderSumtoYourPort(sum)
   calcPercentage(sum, dataFigures)
+  //pass data to graph
+  data.push(dataLabels)
+  data.push(dataPercentage)
+  // drawGraph(data)
 }
 
 ///////////Render portfolio\\\\\\\\\\\\\\\\
@@ -50,10 +55,6 @@ const renderPortfolio = (p) => {
   portList.appendChild(div)
   dataLabels.push(`${p.exchange.currency.slice(-3)}`)
   dataFigures.push(p.home_amt)
-   
-  data.push(dataLabels)
-  data.push(dataFigures)
-  // drawGraph(data)
   
 };
 
@@ -107,7 +108,10 @@ newForm.addEventListener("submit", (e) => {
     home_amt: openingAmt.value * fxRateforHomeValueCalc[0][id],
     exchange_id: id
   };
-  API.createNewAcc(newAcc)//.then(p => renderPortfolio(p))
+  API.createNewAcc(newAcc).then(p => renderPortfolio(p))
+  //to calc to include newly created port
+  // sum = dataFigures.reduce((accum, val) => accum + val, 0)
+  // calcPercentage(sum, dataFigures)
 });
 
 ////////delete\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

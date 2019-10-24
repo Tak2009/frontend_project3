@@ -35,4 +35,25 @@ const deletePort = (id) => {
     })
 };
 
-API = {getFXRates, getPortfolios, createNewAcc, deletePort};
+
+const patchFxRate = (id, obj) =>{
+    return fetch(`${FX_RATES_URL}/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accpet": "application/json"
+        },
+        body: JSON.stringify(obj)
+    })
+}
+
+API = {getFXRates, getPortfolios, createNewAcc, deletePort, patchFxRate};
+
+//test start\\\
+const dummyData = {
+    id: 5,
+    rate: 1.3 //from 1.2985
+} 
+
+API.patchFxRate(5, dummyData);
+//test end\\
