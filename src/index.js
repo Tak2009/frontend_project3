@@ -16,14 +16,6 @@ let sum = 0
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 
-//////////////farates array\\\\\\\\\\\\\\\\\\
-// const fxArray = (fxrates) => {
-//   // for (const fxrate of fxrates) {
-//     fxrates
-//   // }
-// };
-
-
 /////////render portfolios\\\\\\\\\\\\\\\\\\\\
 const renderPortfolios = (portfolios) => { 
   portfolios.forEach(p => renderPortfolio(p));
@@ -33,7 +25,7 @@ const renderPortfolios = (portfolios) => {
   //pass data to graph
   data.push(dataLabels)
   data.push(dataPercentage)
-  // drawGraph(data)
+  drawGraph(data)
 }
 
 ///////////Render portfolio\\\\\\\\\\\\\\\\
@@ -64,7 +56,6 @@ const renderSumtoYourPort = (sum) => {
   div.id = "portfolio-total"
   const h3 = document.createElement("h3")
   h3.innerText = `The total amount of your portfolio is GBP: ${sum.toLocaleString()}`
-  h3.style.color = "blue";
   div.append(h3)
   portList.appendChild(div)
 };
@@ -128,22 +119,22 @@ const deleteAcc = (h3, div) => {
 
 /////////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-// const drawGraph = function(data){
-//     const ctx = document.getElementById('graph').getContext('2d');
-//     const datas = {
-//       labels: data[0],
-//       datasets: [{
-//         backgroundColor: ["rgba(200,20,20,0.3)","rgba(20,200,20,0.3)","rgba(20,20,200,0.3)"],
-//         hoverBackgroundColor: ["rgba(250,20,20,0.3)","rgba(20,250,20,0.3)","rgba(20,20,250,0.3)"],
-//         data: data[1]
-//       }]
-//     };
-//     const config = {
-//       type: 'pie',
-//       data: datas
-//     };
-//     const myChart = new Chart(ctx, config);
-//   };
+const drawGraph = function(data){
+    const ctx = document.getElementById('graph').getContext('2d');
+    const datas = {
+      labels: data[0],
+      datasets: [{
+        backgroundColor: ["rgba(200,20,20,0.3)","rgba(20,200,20,0.3)","rgba(20,20,200,0.3)"],
+        hoverBackgroundColor: ["rgba(250,20,20,0.3)","rgba(20,250,20,0.3)","rgba(20,20,250,0.3)"],
+        data: data[1]
+      }]
+    };
+    const config = {
+      type: 'pie',
+      data: datas
+    };
+    const myChart = new Chart(ctx, config);
+  };
   
   
 //// window.onload=function () {

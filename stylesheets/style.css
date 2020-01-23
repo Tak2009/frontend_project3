@@ -1,14 +1,22 @@
-/* 表の書式設定 */
-.table {
-    text-align: center;
+
+h2 {
+    font-size: 40px ;
 }
 
-/* 行の書式設定 */
-.row {
-    display: flex;
+h3 {
+    font-size: 25px ;
+    color: blue;
+    background: orange;
+    height: 50px;
 }
 
-/* 列の書式設定 */
-.cell {
-    margin: auto;
+#portfolio_list {
+    font-size: 40px;
+    min-height: 300px;
+    width: 40%;
+    background: LightGray;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(auto-fill, auto);
+    grid-row-gap: 10px;
 }
