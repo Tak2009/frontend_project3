@@ -5,17 +5,26 @@ h2 {
 
 h3 {
     font-size: 25px ;
-    color: blue;
-    background: orange;
-    height: 50px;
+    text-align: left;
 }
+
+.row1 {
+    background: orange;
+}
+
+.row2 {
+    background: red;
+    color: white;
+}
+
+
 
 #portfolio_list {
     font-size: 40px;
-    min-height: 300px;
-    width: 40%;
-    background: LightGray;
-    display: grid;
+    min-height: 200px;
+    width: auto;
+    background: #f0eded;
+    display: inline-block;
     grid-template-columns: auto;
     grid-template-rows: repeat(auto-fill, auto);
     grid-row-gap: 10px;

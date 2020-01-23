@@ -33,6 +33,7 @@ const renderPortfolio = (p) => {
     
   const div = document.createElement("div")
   div.id = p.id
+  div.className = "row1"
   const h3 = document.createElement("h3")
   h3.innerText = `${p.exchange.currency.slice(-3)}: ${p.local_amt.toLocaleString()}, which is equivalent to GBP: ${p.home_amt.toLocaleString()}`
 
@@ -54,6 +55,7 @@ const renderPortfolio = (p) => {
 const renderSumtoYourPort = (sum) => {
   const div = document.createElement("div")
   div.id = "portfolio-total"
+  div.className = "row2"
   const h3 = document.createElement("h3")
   h3.innerText = `The total amount of your portfolio is GBP: ${sum.toLocaleString()}`
   div.append(h3)
@@ -66,7 +68,7 @@ const calcPercentage = (sum, dataFigures) => {
   //dataFigures.map(val => {(val/sum)}) did not work. 3 undefineds stored in an array
 }
 
-///////////Reder option in 2\\\\\\\\\\\\\\\\\\\\
+///////////Render option in 2\\\\\\\\\\\\\\\\\\\\
 const renderSelectOption = (fxrates) => {
   console.log(fxrates)
 
@@ -96,7 +98,7 @@ newForm.addEventListener("submit", (e) => {
   
   const newAcc = {
     local_amt: openingAmt.value,
-    home_amt: openingAmt.value * fxRateforHomeValueCalc[0][id],
+    home_amt: openingAmt.value / fxRateforHomeValueCalc[0][id],
     exchange_id: id
   };
   API.createNewAcc(newAcc).then(p => renderPortfolio(p))
