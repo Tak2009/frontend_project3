@@ -38,7 +38,8 @@ const renderPortfolio = (p) => {
   h3.innerText = `${p.exchange.currency.slice(-3)}: ${p.local_amt.toLocaleString()}, which is equivalent to GBP: ${p.home_amt.toLocaleString()}`
 
   const dBtn = document.createElement("button")
-  dBtn.innerText = "Close this account"
+  dBtn.innerText = "Close"
+  dBtn.className = "button"
   dBtn.addEventListener("click", (e) => {
     deleteAcc(h3, div)
   })
