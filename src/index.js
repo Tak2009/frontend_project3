@@ -5,15 +5,16 @@ const newForm = document.querySelector("#new_form")
 const openSelection = document.querySelector("#open_new")
 const openAccBtn = document.querySelector("#open_button")
 const openingAmt = document.querySelector("#open_account")
-const data = []
-const dataLabels = []
-const dataFigures = []
+let data = []
+let dataLabels = []
+let dataFigures = []
 let dataPercentage = []
 let fxIdRatesArray = []
 let sum = 0
 
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
+// API.getPortfolios().then(portfolios => console.log(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 
 /////////render portfolios\\\\\\\\\\\\\\\\\\\\
@@ -41,7 +42,7 @@ const renderPortfolio = (p) => {
   dBtn.innerText = "Close"
   dBtn.className = "button"
   dBtn.addEventListener("click", (e) => {
-    deleteAcc(h3, div)
+    deleteAcc(h3,div)
   })
 
   h3.insertAdjacentElement("beforeend", dBtn)
@@ -109,16 +110,26 @@ newForm.addEventListener("submit", (e) => {
 });
 
 ////////delete\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-const deleteAcc = (h3, div) => {
-  //front-end
-  h3.parentNode.remove()
+const deleteAcc = (h3,div) => {
   //back-end
   const id = div.id
   console.log(id)
   API.deletePort(id)
+  //front-end
+  // h3.parentNode.remove()
+  reRender()
 }
 
+const reRender = () => {
   
+  portList.innerHTML = ""
+  sum = 0
+  data = []
+  dataFigures = []
+  dataLabels = []
+  dataPercentage = []
+  setTimeout("API.getPortfolios().then(portfolios => renderPortfolios(portfolios))", 200)
+}
 
 /////////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
