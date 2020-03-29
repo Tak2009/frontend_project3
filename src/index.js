@@ -1,24 +1,53 @@
 
 const table = document.querySelector("#table")
 const portList = document.querySelector("#portfolio_list")
+const todayDateElement = document.querySelector("#today")
+const revaluationNode = document.querySelector("#revaluation")
+const valueDateTag = document.querySelector("#value-date")
 const newForm = document.querySelector("#new_form")
 const openSelection = document.querySelector("#open_new")
 const openAccBtn = document.querySelector("#open_button")
 const openingAmt = document.querySelector("#open_account")
+let portfolioList = []
+let fxList = []
 let data = []
 let dataLabels = []
 let dataFigures = []
 let dataPercentage = []
 let fxIdRatesArray = []
 let sum = 0
+let todayDate = ""
+let valueDate = ""
 
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 // API.getPortfolios().then(portfolios => console.log(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
 
+window.onload = () => {
+  let today =  new Date()
+  let dd = ("0" + today.getDate()).slice(-2) //二桁表示にするため全てに０を先頭に足してお尻から二桁取得
+  let mm = ("0" + (today.getMonth() + 1)).slice(-2)　//二桁表示にするため全てに０を先頭に足してお尻から二桁取得
+  let yyyy = today.getFullYear()
+  todayDate = `${dd}/${mm}/${yyyy}`
+  todayDateElement.innerText = `Today's Date is ${todayDate}`
+}
+
+const dateFormat = (date) => {
+  const year = date.slice(0,4)
+  const month = date.slice(5,7)
+  const day = date.slice(8,10)
+  return `${day}/${month}/${year}`
+}
+
 /////////render portfolios\\\\\\\\\\\\\\\\\\\\
-const renderPortfolios = (portfolios) => { 
+const renderPortfolios = (portfolios) => {
+  portfolioList = portfolios
+  valueDate = `${dateFormat(portfolios[0].updated_at)}`
+  valueDateTag.innerText = `1. Your Portfolio (Currency Accounts) As of ${valueDate}`
+  // valueDate != todayDate ? null : revaluationNode.removeChild(revaluationNode.firstElementChild)
+  console.log(dateFormat(portfolios[0].updated_at))
+  console.log(todayDate)
   portfolios.forEach(p => renderPortfolio(p));
   sum = dataFigures.reduce((accum, val) => accum + val, 0)     //once all the ports rendered, program comes back here hence sum can be calc
   renderSumtoYourPort(sum)
@@ -73,6 +102,7 @@ const calcPercentage = (sum, dataFigures) => {
 ///////////Render option in 2\\\\\\\\\\\\\\\\\\\\
 const renderSelectOption = (fxrates) => {
   console.log(fxrates)
+  fxList = fxrates
 
   //タスク１：FXIDとRateだけのハッシュを作ってhome currencyベースの残高を作る際に使う
   fxIdRatesArray = fxrates.map(obj => ({[obj.id]: obj.rate })); 
@@ -128,8 +158,28 @@ const reRender = () => {
   dataFigures = []
   dataLabels = []
   dataPercentage = []
-  setTimeout("API.getPortfolios().then(portfolios => renderPortfolios(portfolios))", 200)
+  setTimeout("API.getPortfolios().then(portfolios => renderPortfolios(portfolios))", 500)
 }
+
+// const revaluation = () =>{
+//   API.createNewHist({
+//     home_amt: sum,
+//     value_date: valueDate
+//   })
+//   // Passimistic
+//   portfolioList.forEach(p => {
+//     // debugger
+//     let fxRateforHomeValueCalc = fxIdRatesArray.filter(function(rate, index){
+//       if (Object.keys(rate) == p.exchange_id) return true;
+//     });
+//     // debugger
+//     API.patchAcc({
+//       home_amt: p.local_amt / fxRateforHomeValueCalc[0][p.exchange_id],
+//     }, p.id)
+//   })
+//   // setTimeout("reRender()",500)
+//   reRender()
+// }
 
 /////////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
