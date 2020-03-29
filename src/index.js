@@ -19,6 +19,8 @@ let sum = 0
 let todayDate = ""
 let valueDate = ""
 
+let histData = [['12:00', '13:00', '14:00', '15:00', '16:00'], [22, 23, 21, 20, 19]]
+
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 // API.getPortfolios().then(portfolios => console.log(portfolios))
@@ -182,7 +184,6 @@ const reRender = () => {
 // }
 
 /////////////////////Graph\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
 const drawGraph = function(data){
     const ctx = document.getElementById('graph').getContext('2d');
     const datas = {
@@ -200,9 +201,31 @@ const drawGraph = function(data){
     const myChart = new Chart(ctx, config);
   };
   
+// drawGraph(data);
+
+const drawGraph2 = function(data){
+  let ctx = document.getElementById('graph2').getContext('2d');
+  let myChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: data[0],
+    datasets: [{ label:'Valuation', data:data[1],
+                  fill: true,
+                  backgroundColor: "rgba(200,30,30,0.4)",
+                  borderColor: "rgba(230,10,10,1)",
+                  lineTension: 0,
+                  // 点の設定
+                  pointBorderColor: "rgba(75,192,192,1)",          
+                  pointBackgroundColor: "#fff",             
+                  pointRadius: 5,
+                  pointHoverRadius: 8,
+                  pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                  pointHoverBorderColor: "rgba(220,220,220,1)",
+                  pointHitRadius: 10
+              }]
+      }
+    });
+  };
   
-//// window.onload=function () {
-////     var data = [['A', 'B', 'C'],
-////                 [200, 100, 50]]
-////     drawGraph(data);
-//// };
+  drawGraph2(histData);
+
+  
