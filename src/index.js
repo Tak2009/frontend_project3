@@ -62,7 +62,7 @@ const renderPortfolios = (portfolios) => {
   drawGraph(data)
 }
 
-///////////Render portfolio\\\\\\\\\\\\\\\\
+//////////render portfolio\\\\\\\\\\\\\\\\
 const renderPortfolio = (p) => {
     
   const div = document.createElement("div")
@@ -81,9 +81,17 @@ const renderPortfolio = (p) => {
   h3.insertAdjacentElement("beforeend", dBtn)
   div.append(h3)
   portList.appendChild(div)
+  // すでに存在するアカウントの通過は全てその通過で名寄せする
+  if (dataLabels.includes(p.exchange.currency.slice(-3))){
+    let index = dataLabels.indexOf(p.exchange.currency.slice(-3))
+    let currencyTotal = dataFigures[index] + p.home_amt
+    // pushではなく、計算した通過合計値を使ってすでに存在する金額を同じインデックス番号に存在する金額
+    dataFigures[index] = currencyTotal
+  }
+  else {
   dataLabels.push(`${p.exchange.currency.slice(-3)}`)
   dataFigures.push(p.home_amt)
-  
+  }
 };
 
 ///////add sum line in your portfolio section\\\\\\\\\\
@@ -103,7 +111,7 @@ const calcPercentage = (sum, dataFigures) => {
   //dataFigures.map(val => {(val/sum)}) did not work. 3 undefineds stored in an array
 }
 
-///////////Render option in 2\\\\\\\\\\\\\\\\\\\\
+///////////render option in 2\\\\\\\\\\\\\\\\\\\\
 const renderSelectOption = (fxrates) => {
   console.log(fxrates)
   fxList = fxrates
@@ -151,7 +159,7 @@ const createHistData = (histories) => {
   drawGraph2(histData);
 }
 
-//////////////Open new account\\\\\\\\\\\\\\\\\\\
+//////////////open new account\\\\\\\\\\\\\\\\\\\
 newForm.addEventListener("submit", (e) => {
   //back-end. Passimistic as i need id for rerendering portforlio
   const id = parseInt(openSelection.value.replace(/[^0-9]/g, ''));
