@@ -14,6 +14,11 @@ const getPortfolios = () => {
     .then(resp => resp.json())
 };
 
+const getHist = () => {
+    return fetch(PORT_HIST_URL)
+    .then(resp => resp.json())
+};
+
 const createNewAcc = (newAcc) => {
     return fetch(PORTFOLIOS_URL, {
         method: "POST",
@@ -25,16 +30,16 @@ const createNewAcc = (newAcc) => {
     }).then(resp => resp.json())
 };
 
-const patchAcc = (acc, id) => {
-    return fetch(`${PORTFOLIOS_URL}/${id}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(acc)
-    })
-};
+// const patchAcc = (acc, id) => {
+//     return fetch(`${PORTFOLIOS_URL}/${id}`, {
+//         method: "PATCH",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Accept": "application/json"
+//         },
+//         body: JSON.stringify(acc)
+//     })
+// };
 
 const deletePort = (id) => {
     return fetch(`${PORTFOLIOS_URL}/${id}`,{
@@ -59,19 +64,19 @@ const deletePort = (id) => {
 //     })
 // }
 
-const createNewHist = (newHist) => {
-    return fetch(PORT_HIST_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(newHist)
-    })
-};
+// const createNewHist = (newHist) => {
+//     return fetch(PORT_HIST_URL, {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Accept": "application/json"
+//         },
+//         body: JSON.stringify(newHist)
+//     })
+// };
 
 
-API = {getFXRates, getPortfolios, createNewAcc, deletePort, createNewHist, patchAcc};
+API = {getFXRates, getPortfolios, createNewAcc, deletePort, getHist};
 
 // //test start\\\
 // const dummyData = {

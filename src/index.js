@@ -19,12 +19,14 @@ let sum = 0
 let todayDate = ""
 let valueDate = ""
 
-let histData = [['12:00', '13:00', '14:00', '15:00', '16:00'], [22, 23, 21, 20, 19]]
+let histData = [['27/3', '29/3'], [45000, 45817.875]]
 
 
 API.getPortfolios().then(portfolios => renderPortfolios(portfolios))
 // API.getPortfolios().then(portfolios => console.log(portfolios))
 API.getFXRates().then(fxrates => renderSelectOption(fxrates))
+
+API.getHist().then(histories => createHistData(histories))
 
 window.onload = () => {
   let today =  new Date()
@@ -32,7 +34,7 @@ window.onload = () => {
   let mm = ("0" + (today.getMonth() + 1)).slice(-2)　//二桁表示にするため全てに０を先頭に足してお尻から二桁取得
   let yyyy = today.getFullYear()
   todayDate = `${dd}/${mm}/${yyyy}`
-  todayDateElement.innerText = `Today's Date is ${todayDate}`
+  todayDateElement.innerText = `Today is ${todayDate}`
 }
 
 const dateFormat = (date) => {
@@ -119,6 +121,17 @@ const renderSelectOption = (fxrates) => {
   openSelection.appendChild(curOption)
   })
 };
+
+///////////create vluation history\\\\\\\\\\\\\\\\\\\\
+const createHistData = (histories) => {
+  histData[0] = []
+  histData[1] = []
+  histories.forEach(hist =>{
+    histData[0].push(hist.value_date.slice(5,10))
+    histData[1].push(hist.home_amt)
+  })
+  drawGraph2(histData);
+}
 
 //////////////Open new account\\\\\\\\\\\\\\\\\\\
 newForm.addEventListener("submit", (e) => {
@@ -226,6 +239,6 @@ const drawGraph2 = function(data){
     });
   };
   
-  drawGraph2(histData);
+  
 
   
