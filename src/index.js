@@ -124,11 +124,29 @@ const renderSelectOption = (fxrates) => {
 
 ///////////create vluation history\\\\\\\\\\\\\\\\\\\\
 const createHistData = (histories) => {
+  // debugger
   histData[0] = []
   histData[1] = []
-  histories.forEach(hist =>{
-    histData[0].push(hist.value_date.slice(5,10))
-    histData[1].push(hist.home_amt)
+  // sortするためどのキーを優先するかのリスト
+  const order = [
+    {key: "value_date", reverse: false}
+  ];
+  // reverse: falseで昇順
+  const sortBy = (order) => {
+    return (a, b) => {
+      for (let i=0; i<order.length; i++) {
+          const orderBy = order[i].reverse ? 1 : -1;
+          if (a[order[i].key] < b[order[i].key]) return orderBy;
+          if (a[order[i].key] > b[order[i].key]) return orderBy * -1;
+      }
+      return 0;
+    };
+  }
+  // sortされたhashを使ってarrayを作成。直近の5日まで
+  const sortedHistories = histories.sort(sortBy(order))
+  sortedHistories.slice(-5).forEach(hist =>{
+      histData[0].push(hist.value_date.slice(5,10))
+      histData[1].push(hist.home_amt)
   })
   drawGraph2(histData);
 }
